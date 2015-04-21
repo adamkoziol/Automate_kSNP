@@ -1,4 +1,4 @@
-#! /usr/env/python
+#!/usr/bin/env python
 
 import os, glob, shutil, errno, re, time
 # Argument parser for user-inputted values, and a nifty help menu
