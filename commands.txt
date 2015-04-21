@@ -1,0 +1,17 @@
+python join_paired_ends.py OLF14137_R1_001.cor.fastq OLF14137_R2_001.cor.fastq > OLF14137_paired.fastq
+
+fastq_to_fasta -i OLF14137_paired.fastq -v -n -o OLF14137_pairedReads.fasta 
+
+merge_fasta_reads OLF14137_pairedReads.fasta > OLF14137_pairedMergedReads.fasta
+
+cat *pairedMergedReads.fasta > rawGenomes.fa
+
+genome_names rawGenomes.fa > rawListeriaNames.txt
+
+###  cat rawGenomes.fa referenceGenomes.fa > combinedGenomes.fa
+# referenceGenomes.fa was created using merge_fasta_contigs on a file of reference genomes combined with cat 
+### referenceNames was created by using genome_names on referenceGenomes.fa
+# -f = fasta file    -k = kmer size   -d = output directory   -p = "polished genomes?"   -u "unassembled genomes"?
+kSNP -f combinedGenomes.fa -k 51 -d rawK51 -p referenceNames.txt -u rawListeriaNames.txt 
+
+
