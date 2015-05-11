@@ -1,0 +1,19 @@
+
+kSNPv3automate.py README:
+
+(Before using kSNPv3automate.py it is suggested you place it into a folder that has been added to PATH
+ This will save you having to navigate to the path it's saved in every time you want to use it.)
+
+kSNPv3automate.py runs kSNP version 3.0 on all .fasta files in the inputted directory.
+It should be used through command line with a command as follows:
+$	kSNPv3automate.py -p <path of kSNP fasta files> -k <k-value you wish to use. Default is 51> -o <name you'd like to give the output folder created by kSNP, default is Results>
+
+Note that kSNP version 3.0 is required, as is the tcsh shell. This script is intended for linux UBUNTU.
+
+
+
+
+
+
+If you get an error where __author__, import etc are not recognised, it means the shebang (#!) statement isn't working, and you'll have to type "python" before the command. For example:
+$	python GenomeTrimmer.py -p /home/austin/Genomes/Assembledpacbiow2miseq2015-03-26 -L 500 -f OLC*.fasta
