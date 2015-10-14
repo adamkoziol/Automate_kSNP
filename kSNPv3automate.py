@@ -26,6 +26,8 @@ parser = ArgumentParser(description='runs all kSNP on all fasta and fastq files 
 parser.add_argument('-p', '--path', required=True, help='Specify directory where the files you wish to run are located. The directory should contain only files you wish to include in analysis')
 parser.add_argument('-k', '--kvalue', required=False, default="51", help='Specify the desired k-value. Default is 51.')
 parser.add_argument('-o', '--outfile', required=False, default=date, help='Name of output folder. Default is "report".')
+#  New
+parser.add_argument('-c', '--minCoverage', required=False, default="10", help='Minimum number of times a kmer must occur in an unassembled genome for it to be considered for a SNP allele')
 # Get the arguments into a list
 args = vars(parser.parse_args())
 
@@ -36,6 +38,8 @@ path = args['path']
 kvalue = (args['kvalue'])
 # name of output folder
 Outname = args['outfile']
+# Minimum coverage necessary for an allele to be considered in the analyis - NEW
+mincov = args['minCoverage']
 
 # name of file created that contains a list of all files included in the analysis.
 # Used bykSNP, also specifies name of each sequence (based of file name), separated from the path by a tab.
@@ -61,8 +65,12 @@ def Joinconvertfastq():
     Needs Adam's join_paired_ends.py script (may have to be added to path if you haven't done that yet) and fastx's
     fastq_to_fasta function. Adam's script is on Github, fastx is available online for free"""
     os.system("gunzip *.gz")
+    global mincov
     # makes a list of all fastq files containing "R1" (ie one of the two read files for each paired end sequence)
     R1fastqfiles = glob.glob("*R1*.fastq")
+    # Changed
+    if not R1fastqfiles:
+        mincov = "1"
     for R1file in R1fastqfiles:
         # takes the file name up to R1 to name the new file, joins the two fastq files, converts it to a fasta file, and renames it.
         fastqfile = R1file.split("R1")[0]
@@ -78,6 +86,7 @@ def Joinconvertfastq():
         # TODO: delete fastq joined file
         print "done joining/conversion"
     print "done all fastq joining and conversion"
+
 
 def Writefilelist():
     """Makes a text file named k#Runlist"""
@@ -100,7 +109,8 @@ def RunkSNP(Ksize, filelist, outdirname):
     print "starting kSNP..."
     os.chdir(path)
     # /usr/local/kSNP3.0/
-    subprocess.call(["tcsh", "/home/blais/Bioinformatics/kSNP/kSNP/kSNP3", "-in", filelist, "-k", Ksize, "-outdir", outdirname])
+    # Changed to allow mincov
+    subprocess.call(["tcsh", "/usr/local/kSNP3.0/kSNP3", "-in", filelist, "-k", Ksize, "-c", mincov, "-outdir", outdirname])
     #os.system("tcsh /usr/local/kSNP3.0/kSNP3 -in %s -k %s -outdir %s" % (filelist, Ksize, outdirname))
     os.chdir(path)
     print "...finished kSNP"

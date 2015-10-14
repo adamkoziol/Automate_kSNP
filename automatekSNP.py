@@ -69,17 +69,20 @@ for folder in folders:
             # contigs = glob.glob("%s/%s/*.fasta" % (path, folder))[0]
             name = os.path.split(contigs)[1].replace("_filteredAssembled.fasta", "")
             # name = os.path.split(contigs)[1].replace(".fasta", "")
-            mergeCommand = "/home/blais/Bioinformatics/kSNP/merge_fasta_contigs %s > %s/%s/%s_merged.fasta" % (contigs, path, folder, name)
+            mergeCommand = "/home/blais/Bioinformatics/kSNP2.1.2/merge_fasta_contigs %s > %s/%s/%s_merged.fasta" % (contigs, path, folder, name)
             print mergeCommand
             os.system(mergeCommand)
             shutil.copy("%s/%s/%s_merged.fasta" % (path, folder, name), path)
 
 catCommand = "cat *_merged.fasta > genomes.fa"
-nameCommand = "/home/blais/Bioinformatics/kSNP/genome_names genomes.fa > names.txt"
-kSNPCommand = "/home/blais/Bioinformatics/kSNP/kSNP -f genomes.fa -d kSNP-outk51_%s -k 51 -p names.txt" % date
+nameCommand = "/home/blais/Bioinformatics/kSNP2.1.2/genome_names genomes.fa > names.txt"
+kSNPCommand = "/home/blais/Bioinformatics/kSNP2.1.2/kSNP -f genomes.fa -d kSNP-outk51_%s -k 51 -p names.txt" % date
 
+print catCommand
 os.system(catCommand)
+print nameCommand
 os.system(nameCommand)
+print kSNPCommand
 os.system(kSNPCommand)
 
 
